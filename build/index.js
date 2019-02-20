@@ -1,0 +1,1 @@
+console.log("hello");var a=1;a=1,a=1,a=1;
