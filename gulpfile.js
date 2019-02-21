@@ -14,7 +14,8 @@ gulp.task('server', function(done) {
 });
 
 gulp.task('bs-reload', function(done) {
-  return browserSync.reload();
+  browserSync.reload();
+  done();
 });
 
 

@@ -1,14 +1,78 @@
 <!DOCTYPE <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="./index.css" />
-    <script src="./index.js"></script>
+    <meta charset='utf-8' />
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+		<link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.2/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./index.css' />
+    <script src='./index.js'></script>
+    <title>Currency converter</title>
 </head>
 <body>
-12
+<div class='converter-module'>
+	<h2>Currency converter</h2>
+	<div class='content-wrapper'>
+		<div class='choose-currency'>
+			<div class='exchangeDropdown dropdown'>
+				<label for='exchangeDropdown' class='col-form-label'>To give</label>
+				<button class='btn btn-light dropdown-toggle' type='button' id='exchangeDropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+					Exchange
+				</button>
+				<div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+					<a class='dropdown-item' href='#'>Action</a>
+					<a class='dropdown-item' href='#'>Another action</a>
+					<a class='dropdown-item' href='#'>Something else here</a>
+				</div>
+			</div>
+
+			<button type='button' class='swap-btn btn btn-light'>
+				<i class='fas fa-exchange-alt'></i>
+			</button>
+
+			<div class='getDropdown dropdown'>
+				<label for='getDropdown' class='col-form-label'>To get</label>
+				<button class='btn btn-light dropdown-toggle' type='button' id='getDropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+					Get
+				</button>
+				<div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+					<a class='dropdown-item' href='#'>Action</a>
+					<a class='dropdown-item' href='#'>Another action</a>
+					<a class='dropdown-item' href='#'>Something else here</a>
+				</div>
+			</div>
+		</div>
+		<div class='currency-sum'>
+			<div class='exchange-sum form-group'>
+				<label for='exchange-sum-input' class='col-form-label'>You want to exchange</label>
+				<input type='text' class='form-control' id='exchange-sum-input' placeholder='0.00'>
+			</div>
+
+			<div class='get-sum form-group'>
+				<label for='get-sum-input' class='col-form-label'>You want to get</label>
+				<input type='text' class='form-control' id='get-sum-input' placeholder='0.00'>
+			</div>
+		</div>
+		<div class='details'>
+			<div class='dropdown'>
+				<button class='btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+					Comission
+				</button>
+				<div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
+					<a class='dropdown-item' href='#'>0%</a>
+					<a class='dropdown-item' href='#'>1%</a>
+					<a class='dropdown-item' href='#'>2%</a>
+					<a class='dropdown-item' href='#'>3%</a>
+					<a class='dropdown-item' href='#'>4%</a>
+				</div>
+			</div>
+			<label>Rate: 1 = 1.00</label>
+		</div>
+	</div>
+</div>
+<script src='https://code.jquery.com/jquery-3.3.1.slim.min.js' integrity='sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo' crossorigin='anonymous'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js' integrity='sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1' crossorigin='anonymous'></script>
+<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js' integrity='sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM' crossorigin='anonymous'></script>
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.7.0/angular.min.js'></script>
 </body>
 </html>
