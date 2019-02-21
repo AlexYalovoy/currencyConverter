@@ -1,1 +1,1 @@
-console.log("hello");var a=1;a=1,a=1,a=1;
+const myApp=angular.module("myApp",[]);myApp.controller("phoneController",["$scope",l=>{l.availableCurr=["USD","EUR","RUB","UAH","GBP"]}]);

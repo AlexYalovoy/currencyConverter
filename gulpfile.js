@@ -3,6 +3,7 @@ var cssnano = require('gulp-cssnano');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
+const terser = require('gulp-terser');
 var browserSync = require('browser-sync');
 
 gulp.task('server', function(done) {
@@ -28,7 +29,7 @@ gulp.task('build:html', function() {
 gulp.task('build:js', function() {
   return gulp.src('src/js/*.js')
   .pipe(concat('index.js'))
-  .pipe(uglify())
+  .pipe(terser())
   .pipe(gulp.dest('./build/'));
 });
 
