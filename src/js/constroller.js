@@ -5,6 +5,14 @@ myApp.controller('phoneController', ['$scope', 'requestService', ($scope, reques
     'RUB',
     'UAH',
     'GBP'
-  ]
-  // requestService.getData().then(d => $scope.currency = d.data)
+  ];
+
+}])
+
+myApp.filter('excludeFrom',[function(){
+  return function(array,expression,comparator){
+    return array.filter(function(item){
+  return !expression || !angular.equals(item,expression)
+});
+};
 }])
