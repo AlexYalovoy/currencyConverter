@@ -11,8 +11,8 @@
 	<body>
 		<div class='converter-module' ng-app='myApp'>
 			<h2>Currency converter</h2>
-			<div class='content-wrapper'>
-				<div class='choose-currency' ng-controller='phoneController as ct'>
+			<div class='content-wrapper' ng-controller='currencyController'>
+				<div class='choose-currency'>
 
 					<select ng-model="giveCurr" ng-options="curr for curr in availableCurr | excludeFrom:getCurr" ng-change='getData()'></select>
 
@@ -34,7 +34,7 @@
 						<input type='text' class='form-control' id='get-sum-input' placeholder='0.00'>
 					</div>
 				</div>
-				<div class='details' ng-controller='phoneController as ct'>
+				<div class='details' >
 					<div class='dropdown'>
 						<button class='comission-btn btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
 							Comission
@@ -53,8 +53,7 @@
 						<input type="checkbox" class="custom-control-input" id="customSwitch1">
 						<label class="sell-label custom-control-label" for="customSwitch1">Sell</label>
 					</div>
-					
-					<label>Rate: 1 = <span>{{course}}</span></label>
+					<label>Rate: 1 = <span >{{course.sell}}</span></label>
 				</div>
 			</div>
 		</div>
