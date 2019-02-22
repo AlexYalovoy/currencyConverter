@@ -1,7 +1,10 @@
 myApp.factory('requestService', ['$http', ($http) => {
   return {
-    updateData: () => {
-
+    updateData: function (scope) {
+      this.getData(scope.giveCurr, scope.getCurr).then(d => {
+        scope.course.sell = d.data[`${scope.giveCurr}_${scope.getCurr}`];
+        scope.course.reverseSell = d.data[`${scope.getCurr}_${scope.giveCurr}`];
+      });
     }, 
     getData: (firstC, secondC) => {
       console.log(firstC, secondC)

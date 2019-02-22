@@ -13,12 +13,19 @@ myApp.controller('currencyController', ['$scope', 'requestService', ($scope, req
     reverseSell: 1
   };
 
+  $scope.giveAmount = null;
+  $scope.getAmount = 0;
+
   $scope.getData = () => {
     requestService.getData($scope.giveCurr, $scope.getCurr).then(d => {
       $scope.course.sell = d.data[`${$scope.giveCurr}_${$scope.getCurr}`];
       $scope.course.reverseSell = d.data[`${$scope.getCurr}_${$scope.giveCurr}`];
     });
   };
+
+  $scope.convert = (e) => {
+    $scope.getAmount = e.target.value / $scope.course.sell;
+  }
 
 }]);
 

@@ -26,12 +26,12 @@
 				<div class='currency-sum'>
 					<div class='exchange-sum form-group'>
 						<label for='exchange-sum-input' class='col-form-label'>You want to exchange</label>
-						<input type='text' class='form-control' id='exchange-sum-input' placeholder='0.00'>
+						<input type='text' class='form-control' id='exchange-sum-input' placeholder='0.00' ng-change='convert($event)' ng-model='giveAmount'>
 					</div>
 					
 					<div class='get-sum form-group'>
 						<label for='get-sum-input' class='col-form-label'>You want to get</label>
-						<input type='text' class='form-control' id='get-sum-input' placeholder='0.00'>
+						<input type='text' class='form-control' id='get-sum-input' placeholder='0.00' ng-model='getAmount'>
 					</div>
 				</div>
 				<div class='details' >
