@@ -19,10 +19,12 @@
 							Exchange
 						</button>
 						<div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-							<a class='dropdown-item' href='#' ng-repeat='l in ct.availableCurr'>{{l}}</a>
+							<a class='dropdown-item' href='#' ng-repeat='l in availableCurr'>{{l}}</a>
 						</div>
 					</div>
-					
+
+					<!-- {{currency}} -->
+
 					<button type='button' class='swap-btn btn btn-light'>
 						<i class='fas fa-exchange-alt'></i>
 					</button>
@@ -33,7 +35,7 @@
 							Get
 						</button>
 						<div class='dropdown-menu' aria-labelledby='dropdownMenuButton'>
-							<a class='dropdown-item' href='#' ng-repeat='l ct.in availableCurr'>{{l}}</a>
+							<a class='dropdown-item' href='#' ng-repeat='l in availableCurr'>{{l}}</a>
 						</div>
 					</div>
 				</div>

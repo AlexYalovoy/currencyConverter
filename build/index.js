@@ -1,1 +1,1 @@
-const myApp=angular.module("myApp",[]);myApp.controller("phoneController",["$scope",l=>{l.availableCurr=["USD","EUR","RUB","UAH","GBP"]}]);
+const myApp=angular.module("myApp",[]);myApp.controller("phoneController",["$scope","requestService",(e,r)=>{e.availableCurr=["USD","EUR","RUB","UAH","GBP"]}]),myApp.factory("requestService",["$http",e=>({getData:()=>e.get("https://free.currencyconverterapi.com/api/v6/convert?q=USD_PHP,PHP_USD&compact=ultra&apiKey=63e7db78741025699029")})]);
