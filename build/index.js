@@ -16,7 +16,7 @@
       'GBP'
     ];
 
-    $scope.commisionList = [
+    $scope.comissionList = [
       '0%',
       '1%',
       '2%',
@@ -34,7 +34,7 @@
 
     $scope.giveAmount = null;
     $scope.getAmount = null;
-    $scope.comission = 'Hello';
+    $scope.comission = '0%';
 
     $scope.setData = () => requestService.getData($scope.giveCurr, $scope.getCurr)
       .then(rate => {
@@ -45,11 +45,13 @@
     angular.element($scope.setData);
 
     $scope.convert = () => {
-      $scope.getAmount = ($scope.giveAmount * $scope.course.sell).toFixed(2);
+      const persent = (100 - parseInt($scope.comission, 10)) / 100;
+      $scope.getAmount = ($scope.giveAmount * $scope.course.sell * persent).toFixed(2);
     };
 
     $scope.reverseConvert = () => {
-      $scope.giveAmount = ($scope.getAmount * $scope.course.reverseSell).toFixed(2);
+      const persent = (100 - parseInt($scope.comission, 10)) / 100;
+      $scope.giveAmount = ($scope.getAmount * $scope.course.reverseSell * persent).toFixed(2);
     };
 
     $scope.swapCurrencies = () => {

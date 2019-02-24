@@ -35,7 +35,9 @@
 					</div>
 				</div>
 				<div class='details' >
-					<div class='dropdown'>
+					<select ng-model='comission' ng-options="persent for persent in comissionList | excludeFrom:giveCurr"></select>
+
+					<!-- <div class='dropdown'>
 						<button class='comission-btn btn btn-secondary dropdown-toggle' type='button' id='dropdownMenuButton' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
 							Comission
 						</button>
@@ -52,7 +54,7 @@
 						<label class="buy-label" for="customSwitch1">Buy</label>
 						<input type="checkbox" class="custom-control-input" id="customSwitch1">
 						<label class="sell-label custom-control-label" for="customSwitch1">Sell</label>
-					</div>
+					</div> -->
 					<label>Rate: 1 = <span >{{course.sell}}</span></label>
 				</div>
 			</div>
