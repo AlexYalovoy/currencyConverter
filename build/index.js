@@ -1,1 +1,54 @@
-const myApp=angular.module("myApp",[]);myApp.controller("currencyController",["$scope","requestService",(e,r)=>{e.availableCurr=["USD","EUR","RUB","UAH","GBP"],e.giveCurr="UAH",e.getCurr="USD",e.course={sell:1,reverseSell:1},e.giveAmount=null,e.getAmount=0,e.getData=(()=>{r.getData(e.giveCurr,e.getCurr).then(r=>{e.course.sell=r.data[`${e.giveCurr}_${e.getCurr}`],e.course.reverseSell=r.data[`${e.getCurr}_${e.giveCurr}`]})}),e.convert=(r=>{e.getAmount=r.target.value/e.course.sell})}]),myApp.filter("excludeFrom",[function(){return function(e,r){return e.filter(e=>!r||!angular.equals(e,r))}}]),myApp.factory("requestService",["$http",e=>({updateData:function(e){this.getData(e.giveCurr,e.getCurr).then(r=>{e.course.sell=r.data[`${e.giveCurr}_${e.getCurr}`],e.course.reverseSell=r.data[`${e.getCurr}_${e.giveCurr}`]})},getData:(r,t)=>(console.log(r,t),e.get(`https://free.currencyconverterapi.com/api/v6/convert?q=${r}_${t},${t}_${r}&compact=ultra&apiKey=63e7db78741025699029`))})]);
+(() => {
+  const myApp = angular.module('myApp', []);
+  window.myApp = myApp;
+})();
+(() => {
+  myApp.controller('currencyController', ['$scope', 'requestService', ($scope, requestService) => {
+    $scope.availableCurr = [
+      'USD',
+      'EUR',
+      'RUB',
+      'UAH',
+      'GBP'
+    ];
+    $scope.giveCurr = 'UAH';
+    $scope.getCurr = 'USD';
+    $scope.course = {
+      sell: 1,
+      reverseSell: 1
+    };
+
+    $scope.giveAmount = null;
+    $scope.getAmount = 0;
+
+    $scope.getData = () => {
+      requestService.getData($scope.giveCurr, $scope.getCurr).then(d => {
+        $scope.course.sell = d.data[`${$scope.giveCurr}_${$scope.getCurr}`];
+        $scope.course.reverseSell = d.data[`${$scope.getCurr}_${$scope.giveCurr}`];
+      });
+    };
+
+    $scope.convert = e => {
+      $scope.getAmount = e.target.value / $scope.course.sell;
+    };
+  }]);
+
+  myApp.filter('excludeFrom', [function() {
+    return function(array, expression) {
+      return array.filter(item => !expression || !angular.equals(item, expression));
+    };
+  }]);
+})();
+
+(() => {
+  myApp.factory('requestService', ['$http', $http => ({
+    updateData: scope => {
+      this.getData(scope.giveCurr, scope.getCurr).then(d => {
+        scope.course.sell = d.data[`${scope.giveCurr}_${scope.getCurr}`];
+        scope.course.reverseSell = d.data[`${scope.getCurr}_${scope.giveCurr}`];
+      });
+    },
+    getData: (firstC, secondC) => $http.get(`https://free.currencyconverterapi.com/api/v6/convert?
+      q=${firstC}_${secondC},${secondC}_${firstC}&compact=ultra&apiKey=63e7db78741025699029`)
+  })]);
+})();

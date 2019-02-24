@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp",
-    "build": "gulp build"
+    "build": "gulp build",
+    "lint": "eslint --ext .js src/"
   },
   "pre-commit": [
     "lint"
@@ -14,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-eslint": "^10.0.1",
     "browser-sync": "^2.26.3",
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^12.0.2",
