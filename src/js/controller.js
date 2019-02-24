@@ -20,8 +20,8 @@
 
     $scope.getData = () => {
       requestService.getData($scope.giveCurr, $scope.getCurr).then(d => {
-        $scope.course.sell = d.data[`${$scope.giveCurr}_${$scope.getCurr}`];
-        $scope.course.reverseSell = d.data[`${$scope.getCurr}_${$scope.giveCurr}`];
+        $scope.course.sell = d[`${$scope.giveCurr}_${$scope.getCurr}`];
+        $scope.course.reverseSell = d[`${$scope.getCurr}_${$scope.giveCurr}`];
       });
     };
 
