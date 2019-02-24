@@ -3,10 +3,6 @@
   window.myApp = myApp;
 })();
 (() => {
-  myApp.constant('API', 'https://free.currencyconverterapi.com/api/v6/convert');
-  myApp.constant('KEY', '63e7db78741025699029');
-})();
-(() => {
   myApp.controller('currencyController', ['$scope', 'requestService', ($scope, requestService) => {
     $scope.availableCurr = [
       'USD',
@@ -24,6 +20,7 @@
       '4%',
       '5%'
     ];
+
     $scope.giveCurr = 'UAH';
     $scope.getCurr = 'USD';
 
@@ -40,7 +37,8 @@
       .then(rate => {
         $scope.course.sell = rate;
         $scope.course.reverseSell = 1 / rate;
-      });
+      })
+      .then($scope.convert);
 
     angular.element($scope.setData);
 
@@ -57,20 +55,15 @@
     $scope.swapCurrencies = () => {
       [$scope.giveCurr, $scope.getCurr] = [$scope.getCurr, $scope.giveCurr];
 
-      $scope.setData()
-        .then(() => {
-          $scope.convert();
-        });
-    };
-  }]);
-
-  myApp.filter('excludeFrom', [function() {
-    return function(array, expression) {
-      return array.filter(item => !expression || !angular.equals(item, expression));
+      $scope.setData();
     };
   }]);
 })();
 
+(() => {
+  myApp.filter('excludeFrom', [() => (array, expression) =>
+    array.filter(item => !expression || !angular.equals(item, expression))]);
+})();
 (() => {
   myApp.factory('requestService', ['$http', '$q', function($http, $q) {
     const API = 'https://free.currencyconverterapi.com/api/v6/convert';
@@ -78,12 +71,6 @@
     const HOUR = 1000 * 60 * 60;
 
     return {
-      updateData: scope => {
-        this.getData(scope.giveCurr, scope.getCurr).then(d => {
-          scope.course.sell = d.data[`${scope.giveCurr}_${scope.getCurr}`];
-          scope.course.reverseSell = d.data[`${scope.getCurr}_${scope.giveCurr}`];
-        });
-      },
       getData: (firstCurr, secondCurr) => {
         const pair = `${firstCurr}_${secondCurr}`;
         const reversePair = `${secondCurr}_${firstCurr}`;

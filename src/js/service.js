@@ -5,12 +5,6 @@
     const HOUR = 1000 * 60 * 60;
 
     return {
-      updateData: scope => {
-        this.getData(scope.giveCurr, scope.getCurr).then(d => {
-          scope.course.sell = d.data[`${scope.giveCurr}_${scope.getCurr}`];
-          scope.course.reverseSell = d.data[`${scope.getCurr}_${scope.giveCurr}`];
-        });
-      },
       getData: (firstCurr, secondCurr) => {
         const pair = `${firstCurr}_${secondCurr}`;
         const reversePair = `${secondCurr}_${firstCurr}`;

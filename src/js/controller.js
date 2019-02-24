@@ -16,6 +16,7 @@
       '4%',
       '5%'
     ];
+
     $scope.giveCurr = 'UAH';
     $scope.getCurr = 'USD';
 
@@ -32,7 +33,8 @@
       .then(rate => {
         $scope.course.sell = rate;
         $scope.course.reverseSell = 1 / rate;
-      });
+      })
+      .then($scope.convert);
 
     angular.element($scope.setData);
 
@@ -49,16 +51,7 @@
     $scope.swapCurrencies = () => {
       [$scope.giveCurr, $scope.getCurr] = [$scope.getCurr, $scope.giveCurr];
 
-      $scope.setData()
-        .then(() => {
-          $scope.convert();
-        });
-    };
-  }]);
-
-  myApp.filter('excludeFrom', [function() {
-    return function(array, expression) {
-      return array.filter(item => !expression || !angular.equals(item, expression));
+      $scope.setData();
     };
   }]);
 })();
