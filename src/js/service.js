@@ -1,5 +1,5 @@
 (() => {
-  myApp.factory('requestService', ['$http', function($http) {
+  myApp.factory('requestService', ['$http', '$q', function($http, $q) {
     const API = 'https://free.currencyconverterapi.com/api/v6/convert';
     const KEY = '63e7db78741025699029';
     const HOUR = 1000 * 60 * 60;
@@ -12,28 +12,32 @@
         });
       },
       getData: (firstCurr, secondCurr) => {
-        const storedRate = JSON.parse(localStorage.getItem(`myApp.${firstCurr}_${secondCurr}`));
+        const pair = `${firstCurr}_${secondCurr}`;
+        const reversePair = `${secondCurr}_${firstCurr}`;
+        const storedRate = JSON.parse(localStorage.getItem(`myApp.${pair}`));
         const time = Date.now();
 
+        // Get rate from localStore or do request and cache results into localstore
         if (storedRate && (time - storedRate.time < HOUR)) {
-          return Promise.resolve(storedRate);
+          return $q(resolve => resolve(storedRate[`${pair}`]));
         }
 
-        return $http.get(`${API}?q=${firstCurr}_${secondCurr},${secondCurr}_${firstCurr}&compact=ultra&apiKey=${KEY}`)
+        return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
           .then(response => {
             const rate = Object.assign(
               {},
-              { [`${firstCurr}_${secondCurr}`]: response.data[`${firstCurr}_${secondCurr}`] },
+              { [`${pair}`]: response.data[`${pair}`] },
               { time }
             );
             const secondRate = Object.assign(
               {},
-              { [`${secondCurr}_${firstCurr}`]: response.data[`${secondCurr}_${firstCurr}`] },
+              { [`${reversePair}`]: response.data[`${reversePair}`] },
               { time }
             );
-            localStorage.setItem(`myApp.${firstCurr}_${secondCurr}`, JSON.stringify(rate));
-            localStorage.setItem(`myApp.${secondCurr}_${firstCurr}`, JSON.stringify(secondRate));
-            return rate;
+            localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
+            localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
+
+            return rate[`${pair}`];
           });
       }
     };

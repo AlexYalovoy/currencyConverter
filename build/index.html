@@ -13,13 +13,15 @@
 			<h2>Currency converter</h2>
 			<div class='content-wrapper' ng-controller='currencyController'>
 				<div class='choose-currency'>
-					<select ng-model="giveCurr" ng-options="curr for curr in availableCurr | excludeFrom:getCurr" ng-change='getData()'></select>
 
-					<button type='button' class='swap-btn btn btn-light'>
+					<select ng-model="giveCurr" ng-options="curr for curr in availableCurr | excludeFrom:getCurr" ng-change='setData()'></select>
+
+					<button type='button' class='swap-btn btn btn-light'  ng-click='swapCurrencies()'>
 						<i class='fas fa-exchange-alt'></i>
 					</button>
 
-					<select ng-model="getCurr" ng-options="curr for curr in availableCurr | excludeFrom:giveCurr" ng-change='getData()'></select>
+					<select ng-model="getCurr" ng-options="curr for curr in availableCurr | excludeFrom:giveCurr" ng-change='setData()'></select>
+
 				</div>
 				<div class='currency-sum'>
 					<div class='exchange-sum form-group'>

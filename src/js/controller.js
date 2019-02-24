@@ -7,6 +7,15 @@
       'UAH',
       'GBP'
     ];
+
+    $scope.commisionList = [
+      '0%',
+      '1%',
+      '2%',
+      '3%',
+      '4%',
+      '5%'
+    ];
     $scope.giveCurr = 'UAH';
     $scope.getCurr = 'USD';
 
@@ -16,21 +25,32 @@
     };
 
     $scope.giveAmount = null;
-    $scope.getAmount = 0;
+    $scope.getAmount = null;
+    $scope.comission = 'Hello';
 
-    $scope.getData = () => {
-      requestService.getData($scope.giveCurr, $scope.getCurr).then(d => {
-        $scope.course.sell = d[`${$scope.giveCurr}_${$scope.getCurr}`];
-        $scope.course.reverseSell = d[`${$scope.getCurr}_${$scope.giveCurr}`];
+    $scope.setData = () => requestService.getData($scope.giveCurr, $scope.getCurr)
+      .then(rate => {
+        $scope.course.sell = rate;
+        $scope.course.reverseSell = 1 / rate;
       });
-    };
+
+    angular.element($scope.setData);
 
     $scope.convert = () => {
       $scope.getAmount = ($scope.giveAmount * $scope.course.sell).toFixed(2);
     };
 
     $scope.reverseConvert = () => {
-      $scope.giveAmount = ($scope.getAmount * (1 / $scope.course.sell)).toFixed(2);
+      $scope.giveAmount = ($scope.getAmount * $scope.course.reverseSell).toFixed(2);
+    };
+
+    $scope.swapCurrencies = () => {
+      [$scope.giveCurr, $scope.getCurr] = [$scope.getCurr, $scope.giveCurr];
+
+      $scope.setData()
+        .then(() => {
+          $scope.convert();
+        });
     };
   }]);
 

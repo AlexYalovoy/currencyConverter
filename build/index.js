@@ -15,6 +15,15 @@
       'UAH',
       'GBP'
     ];
+
+    $scope.commisionList = [
+      '0%',
+      '1%',
+      '2%',
+      '3%',
+      '4%',
+      '5%'
+    ];
     $scope.giveCurr = 'UAH';
     $scope.getCurr = 'USD';
 
@@ -24,21 +33,32 @@
     };
 
     $scope.giveAmount = null;
-    $scope.getAmount = 0;
+    $scope.getAmount = null;
+    $scope.comission = 'Hello';
 
-    $scope.getData = () => {
-      requestService.getData($scope.giveCurr, $scope.getCurr).then(d => {
-        $scope.course.sell = d[`${$scope.giveCurr}_${$scope.getCurr}`];
-        $scope.course.reverseSell = d[`${$scope.getCurr}_${$scope.giveCurr}`];
+    $scope.setData = () => requestService.getData($scope.giveCurr, $scope.getCurr)
+      .then(rate => {
+        $scope.course.sell = rate;
+        $scope.course.reverseSell = 1 / rate;
       });
-    };
+
+    angular.element($scope.setData);
 
     $scope.convert = () => {
       $scope.getAmount = ($scope.giveAmount * $scope.course.sell).toFixed(2);
     };
 
     $scope.reverseConvert = () => {
-      $scope.giveAmount = ($scope.getAmount * (1 / $scope.course.sell)).toFixed(2);
+      $scope.giveAmount = ($scope.getAmount * $scope.course.reverseSell).toFixed(2);
+    };
+
+    $scope.swapCurrencies = () => {
+      [$scope.giveCurr, $scope.getCurr] = [$scope.getCurr, $scope.giveCurr];
+
+      $scope.setData()
+        .then(() => {
+          $scope.convert();
+        });
     };
   }]);
 
@@ -50,7 +70,7 @@
 })();
 
 (() => {
-  myApp.factory('requestService', ['$http', function($http) {
+  myApp.factory('requestService', ['$http', '$q', function($http, $q) {
     const API = 'https://free.currencyconverterapi.com/api/v6/convert';
     const KEY = '63e7db78741025699029';
     const HOUR = 1000 * 60 * 60;
@@ -63,28 +83,32 @@
         });
       },
       getData: (firstCurr, secondCurr) => {
-        const storedRate = JSON.parse(localStorage.getItem(`myApp.${firstCurr}_${secondCurr}`));
+        const pair = `${firstCurr}_${secondCurr}`;
+        const reversePair = `${secondCurr}_${firstCurr}`;
+        const storedRate = JSON.parse(localStorage.getItem(`myApp.${pair}`));
         const time = Date.now();
 
+        // Get rate from localStore or do request and cache results into localstore
         if (storedRate && (time - storedRate.time < HOUR)) {
-          return Promise.resolve(storedRate);
+          return $q(resolve => resolve(storedRate[`${pair}`]));
         }
 
-        return $http.get(`${API}?q=${firstCurr}_${secondCurr},${secondCurr}_${firstCurr}&compact=ultra&apiKey=${KEY}`)
+        return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
           .then(response => {
             const rate = Object.assign(
               {},
-              { [`${firstCurr}_${secondCurr}`]: response.data[`${firstCurr}_${secondCurr}`] },
+              { [`${pair}`]: response.data[`${pair}`] },
               { time }
             );
             const secondRate = Object.assign(
               {},
-              { [`${secondCurr}_${firstCurr}`]: response.data[`${secondCurr}_${firstCurr}`] },
+              { [`${reversePair}`]: response.data[`${reversePair}`] },
               { time }
             );
-            localStorage.setItem(`myApp.${firstCurr}_${secondCurr}`, JSON.stringify(rate));
-            localStorage.setItem(`myApp.${secondCurr}_${firstCurr}`, JSON.stringify(secondRate));
-            return rate;
+            localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
+            localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
+
+            return rate[`${pair}`];
           });
       }
     };
