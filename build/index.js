@@ -35,8 +35,8 @@
 
     $scope.setData = () => requestService.getData($scope.giveCurr, $scope.getCurr)
       .then(rate => {
-        $scope.course.sell = rate;
-        $scope.course.reverseSell = 1 / rate;
+        $scope.course.sell = rate.toFixed(6);
+        $scope.course.reverseSell = (1 / rate).toFixed(6);
       })
       .then($scope.convert);
 

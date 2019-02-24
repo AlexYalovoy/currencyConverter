@@ -36,7 +36,10 @@
 				</div>
 				<div class='details' >
 					<select ng-model='comission' ng-options="persent for persent in comissionList | excludeFrom:giveCurr"></select>
-					<label>Rate: 1 = <span >{{course.sell}}</span></label>
+					<div class = 'rates'>
+						<div>Sell 1 {{giveCurr}} for {{course.sell}} {{getCurr}}</div>
+						<div>Or sell {{course.reverseSell}} {{giveCurr}} for 1 {{getCurr}}</div>
+					</div>
 				</div>
 			</div>
 		</div>

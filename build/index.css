@@ -16,24 +16,11 @@ body {
   display: flex;
   flex-direction: row;
   vertical-align: middle;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between; }
-
-.exchangeDropdown, .getDropdown {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 45%; }
 
 .swap-btn {
   height: 40px; }
-
-.dropdown {
-  display: flex;
-  flex-direction: column;
-  text-align: center; }
-
-.dropdown-menu {
-  width: 100%; }
 
 .exchange-sum, .get-sum {
   flex-grow: 0;
@@ -41,14 +28,6 @@ body {
   flex-basis: 45%;
   text-align: center; }
 
-.comission-btn {
-  background: #3d6778 !important; }
-
-.sell-label {
-  display: inline; }
-
-.buy-label {
-  margin-right: 40px; }
-
-.custom-switch {
-  padding-left: 0; }
+.rates {
+  max-width: 60%;
+  text-align: right; }
