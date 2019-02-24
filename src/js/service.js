@@ -6,7 +6,11 @@
         scope.course.reverseSell = d.data[`${scope.getCurr}_${scope.giveCurr}`];
       });
     },
-    getData: (firstC, secondC) => $http.get(`https://free.currencyconverterapi.com/api/v6/convert?
-      q=${firstC}_${secondC},${secondC}_${firstC}&compact=ultra&apiKey=63e7db78741025699029`)
+    getData: (firstC, secondC) => {
+      const host = 'https://free.currencyconverterapi.com/';
+      const key = '63e7db78741025699029';
+
+      return $http.get(`${host}api/v6/convert?q=${firstC}_${secondC},${secondC}_${firstC}&compact=ultra&apiKey=${key}`);
+    }
   })]);
 })();

@@ -9,6 +9,7 @@
     ];
     $scope.giveCurr = 'UAH';
     $scope.getCurr = 'USD';
+
     $scope.course = {
       sell: 1,
       reverseSell: 1
@@ -24,8 +25,12 @@
       });
     };
 
-    $scope.convert = e => {
-      $scope.getAmount = e.target.value / $scope.course.sell;
+    $scope.convert = () => {
+      $scope.getAmount = ($scope.giveAmount * $scope.course.sell).toFixed(2);
+    };
+
+    $scope.reverseConvert = () => {
+      $scope.giveAmount = ($scope.getAmount * (1 / $scope.course.sell)).toFixed(2);
     };
   }]);
 

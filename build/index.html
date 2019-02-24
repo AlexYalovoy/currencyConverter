@@ -13,7 +13,6 @@
 			<h2>Currency converter</h2>
 			<div class='content-wrapper' ng-controller='currencyController'>
 				<div class='choose-currency'>
-
 					<select ng-model="giveCurr" ng-options="curr for curr in availableCurr | excludeFrom:getCurr" ng-change='getData()'></select>
 
 					<button type='button' class='swap-btn btn btn-light'>
@@ -21,17 +20,16 @@
 					</button>
 
 					<select ng-model="getCurr" ng-options="curr for curr in availableCurr | excludeFrom:giveCurr" ng-change='getData()'></select>
-
 				</div>
 				<div class='currency-sum'>
 					<div class='exchange-sum form-group'>
 						<label for='exchange-sum-input' class='col-form-label'>You want to exchange</label>
-						<input type='text' class='form-control' id='exchange-sum-input' placeholder='0.00' ng-change='convert($event)' ng-model='giveAmount'>
+						<input type='text' class='form-control' id='exchange-sum-input' placeholder='0.00' ng-change='convert()' ng-model='giveAmount'>
 					</div>
 					
 					<div class='get-sum form-group'>
 						<label for='get-sum-input' class='col-form-label'>You want to get</label>
-						<input type='text' class='form-control' id='get-sum-input' placeholder='0.00' ng-model='getAmount'>
+						<input type='text' class='form-control' id='get-sum-input' placeholder='0.00' ng-change='reverseConvert()' ng-model='getAmount'>
 					</div>
 				</div>
 				<div class='details' >
