@@ -12,8 +12,11 @@
       reverseSell: 1
     };
 
-    this.giveAmount = null;
-    this.getAmount = null;
+    this.money = {
+      give: null,
+      get: null
+    };
+
     this.comission = '0%';
 
     this.setData = () => requestService.getData(this.giveCurr, this.getCurr)
@@ -27,11 +30,11 @@
     angular.element(this.setData);
 
     this.convert = () => {
-      this.getAmount = (this.giveAmount * this.course.sell).toFixed(2);
+      requestService.convert(this.money, this.course);
     };
 
     this.reverseConvert = () => {
-      this.giveAmount = (this.getAmount * this.course.reverseSell).toFixed(2);
+      requestService.reverseConvert(this.money, this.course);
     };
 
     this.swapCurrencies = () => {

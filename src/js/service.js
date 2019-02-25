@@ -38,7 +38,16 @@
 
             return response.data[`${pair}`];
           });
+      },
+
+      convert: (moneyInput, course) => {
+        moneyInput.get = (moneyInput.give * course.sell).toFixed(2);
+      },
+
+      reverseConvert: (moneyInput, course) => {
+        moneyInput.give = (moneyInput.get * course.reverseSell).toFixed(2);
       }
+
     };
   }]);
 })();
