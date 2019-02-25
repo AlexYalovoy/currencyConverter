@@ -19,20 +19,22 @@
 
         return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
           .then(response => {
-            if (useCache) {
-              const rate = Object.assign(
-                {},
-                { [`${pair}`]: response.data[`${pair}`] },
-                { time }
-              );
-              const secondRate = Object.assign(
-                {},
-                { [`${reversePair}`]: response.data[`${reversePair}`] },
-                { time }
-              );
-              localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
-              localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
+            if (!useCache) {
+              return response.data[`${pair}`];
             }
+
+            const rate = Object.assign(
+              {},
+              { [`${pair}`]: response.data[`${pair}`] },
+              { time }
+            );
+            const secondRate = Object.assign(
+              {},
+              { [`${reversePair}`]: response.data[`${reversePair}`] },
+              { time }
+            );
+            localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
+            localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
 
             return response.data[`${pair}`];
           });

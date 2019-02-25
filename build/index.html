@@ -40,7 +40,7 @@
 				<div class='details' >
 					<div class='select-wrapper'>
 						<label>Comission</label>
-						<select class = 'select' ng-model='cc.comission' ng-options="persent for persent in cc.comissionList | excludeFrom:cc.giveCurr"></select>
+						<select class = 'select' ng-model='cc.comission' ng-options="persent for persent in cc.comissionList | excludeFrom:cc.giveCurr" ng-change='cc.setData()'></select>
 					</div>
 					<div class = 'rates'>
 						<div>Sell 1 {{cc.giveCurr}} for {{cc.course.sell}} {{cc.getCurr}}</div>
