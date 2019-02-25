@@ -11,7 +11,7 @@
     'GBP'
   ]);
 
-  myApp.constant('commissionList', [
+  myApp.constant('feeList', [
     '0%',
     '1%',
     '2%',
@@ -19,15 +19,20 @@
     '4%',
     '5%'
   ]);
+
+  myApp.constant('API', 'https://free.currencyconverterapi.com/api/v6/convert');
+  myApp.constant('KEY', '63e7db78741025699029');
+  myApp.constant('HOUR', 1000 * 60 * 60);
+  myApp.constant('USE_CACHE', true);
 })();
 /* eslint-disable max-params, max-len */
 (() => {
-  myApp.controller('currencyController', ['requestService', 'availableCurr', 'commissionList', function(requestService, availableCurr, commissionList) {
+  myApp.controller('currencyController', ['requestService', 'availableCurr', 'feeList', '$scope', function(requestService, availableCurr, feeList, $scope) {
     this.availableCurr = availableCurr;
-    this.comissionList = commissionList;
-
-    this.giveCurr = 'UAH';
-    this.getCurr = 'USD';
+    this.feeList = feeList;
+    this.giveCurr = availableCurr[0];
+    this.getCurr = availableCurr[3];
+    this.fee = feeList[2];
 
     this.course = {
       sell: 1,
@@ -39,30 +44,38 @@
       get: null
     };
 
-    this.comission = '0%';
+    $scope.$watch(() => this.giveCurr, () => {
+      this.setCourse();
+      this.convert();
+    });
 
-    this.setData = () => requestService.getData(this.giveCurr, this.getCurr)
-      .then(rate => {
-        const persent = (100 - parseInt(this.comission, 10)) / 100;
-        this.course.sell = (rate * persent).toFixed(6);
-        this.course.reverseSell = (1 / (rate * persent)).toFixed(6);
-      })
-      .then(this.convert);
+    $scope.$watch(() => this.getCurr, () => {
+      this.setCourse();
+      this.convert();
+    });
 
-    angular.element(this.setData);
+    $scope.$watch(() => this.fee, () => {
+      this.setCourse();
+      this.convert();
+    });
+
+    $scope.$watch(() => this.money.give, () => {
+      this.convert();
+    });
+
+    this.setCourse = () => {
+      this.course.sell = requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee);
+      this.course.reverseSell = requestService.getReverseRate(this.course.sell);
+    };
 
     this.convert = () => {
-      requestService.convert(this.money, this.course);
+      this.money.get = requestService.convert(this.money.give, this.course.sell);
     };
 
-    this.reverseConvert = () => {
-      requestService.reverseConvert(this.money, this.course);
-    };
+    angular.element(this.setCourse);
 
     this.swapCurrencies = () => {
       [this.giveCurr, this.getCurr] = [this.getCurr, this.giveCurr];
-
-      this.setData();
     };
   }]);
 })();
@@ -71,28 +84,27 @@
   myApp.filter('excludeFrom', [() => (array, expression) =>
     array.filter(item => !expression || !angular.equals(item, expression))]);
 })();
+/* eslint-disable max-params, max-len */
 (() => {
-  myApp.factory('requestService', ['$http', '$q', function($http, $q) {
-    const API = 'https://free.currencyconverterapi.com/api/v6/convert';
-    const KEY = '63e7db78741025699029';
-    const HOUR = 1000 * 60 * 60;
-    const useCache = true;
-
+  myApp.factory('requestService', ['$http', '$q', 'API', 'KEY', 'HOUR', 'USE_CACHE', function($http, $q, API, KEY, HOUR, USE_CACHE) {
     return {
-      getData: (firstCurr, secondCurr) => {
+      getRateWithFee: (firstCurr, secondCurr, fee) => {
         const pair = `${firstCurr}_${secondCurr}`;
         const reversePair = `${secondCurr}_${firstCurr}`;
         const storedRate = JSON.parse(localStorage.getItem(`myApp.${pair}`));
         const time = Date.now();
+        const persent = (100 - parseInt(fee, 10)) / 100;
+        let sellCourse = 0;
 
         // Get rate from localStore or do request and cache results into localstore
-        if (useCache && storedRate && (time - storedRate.time < HOUR)) {
-          return $q(resolve => resolve(storedRate[`${pair}`]));
+        if (USE_CACHE && storedRate && (time - storedRate.time < HOUR)) {
+          sellCourse = (storedRate[`${pair}`] * persent).toFixed(6);
+          return sellCourse;
         }
 
-        return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
+        $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
           .then(response => {
-            if (!useCache) {
+            if (!USE_CACHE) {
               return response.data[`${pair}`];
             }
 
@@ -109,18 +121,13 @@
             localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
             localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
 
-            return response.data[`${pair}`];
+            sellCourse = (storedRate[`${pair}`] * persent).toFixed(6);
           });
+
+        return sellCourse;
       },
-
-      convert: (moneyInput, course) => {
-        moneyInput.get = (moneyInput.give * course.sell).toFixed(2);
-      },
-
-      reverseConvert: (moneyInput, course) => {
-        moneyInput.give = (moneyInput.get * course.reverseSell).toFixed(2);
-      }
-
+      getReverseRate: rate => (1 / rate).toFixed(6),
+      convert: (giveAmount, course) => (giveAmount * course).toFixed(2)
     };
   }]);
 })();
