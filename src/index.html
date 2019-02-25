@@ -11,40 +11,40 @@
 	<body>
 		<div class='converter-module' ng-app='myApp'>
 			<h2>Currency converter</h2>
-			<div class='content-wrapper' ng-controller='currencyController'>
+			<div class='content-wrapper' ng-controller='currencyController as cc' >
 				<div class='choose-currency'>
 					<div class = 'select-wrapper'>
 						<label for='give-currency-select' class='col-form-label'>You want to exchange</label>
-						<select class = 'select' id = 'give-currency-select' ng-model="giveCurr" ng-options="curr for curr in availableCurr | excludeFrom:getCurr" ng-change='setData()'></select>
+						<select class = 'select' id = 'give-currency-select' ng-model="cc.giveCurr" ng-options="curr for curr in cc.availableCurr | excludeFrom:cc.getCurr" ng-change='cc.setData()'></select>
 					</div>
 
-					<button type='button' class='swap-btn btn btn-light'  ng-click='swapCurrencies()'>
+					<button type='button' class='swap-btn btn btn-light'  ng-click='cc.swapCurrencies()'>
 						<i class='fas fa-exchange-alt'></i>
 					</button>
 
 					<div class = 'select-wrapper'>
 						<label for='get-currency-select' class='col-form-label'>You want to get</label>
-						<select class = 'select' id = 'get-currency-select' ng-model="getCurr" ng-options="curr for curr in availableCurr | excludeFrom:giveCurr" ng-change='setData()'></select>
+						<select class = 'select' id = 'get-currency-select' ng-model="cc.getCurr" ng-options="curr for curr in cc.availableCurr | excludeFrom:cc.giveCurr" ng-change='cc.setData()'></select>
 					</div>
 
 				</div>
 				<div class='currency-sum'>
 					<div class='exchange-sum form-group'>
-						<input type='number' class='form-control' placeholder='0.00' ng-change='convert()' ng-model='giveAmount'>
+						<input type='text' class='form-control' placeholder='0.00' ng-change='cc.convert()' ng-model='cc.giveAmount'>
 					</div>
 					
 					<div class='get-sum form-group'>
-						<input type='number' class='form-control' placeholder='0.00' ng-change='reverseConvert()' ng-model='getAmount'>
+						<input type='text' class='form-control' placeholder='0.00' ng-change='cc.reverseConvert()' ng-model='cc.getAmount'>
 					</div>
 				</div>
 				<div class='details' >
 					<div class='select-wrapper'>
 						<label>Comission</label>
-						<select class = 'select' ng-model='comission' ng-options="persent for persent in comissionList | excludeFrom:giveCurr"></select>
+						<select class = 'select' ng-model='cc.comission' ng-options="persent for persent in cc.comissionList | excludeFrom:cc.giveCurr"></select>
 					</div>
 					<div class = 'rates'>
-						<div>Sell 1 {{giveCurr}} for {{course.sell}} {{getCurr}}</div>
-						<div>Or sell {{course.reverseSell}} {{giveCurr}} for 1 {{getCurr}}</div>
+						<div>Sell 1 {{cc.giveCurr}} for {{cc.course.sell}} {{cc.getCurr}}</div>
+						<div>Or sell {{cc.course.reverseSell}} {{cc.giveCurr}} for 1 {{cc.getCurr}}</div>
 					</div>
 				</div>
 			</div>

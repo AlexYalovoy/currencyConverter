@@ -1,44 +1,44 @@
 /* eslint-disable max-params, max-len */
 (() => {
-  myApp.controller('currencyController', ['$scope', 'requestService', 'availableCurr', 'commissionList', ($scope, requestService, availableCurr, commissionList) => {
-    $scope.availableCurr = availableCurr;
-    $scope.comissionList = commissionList;
+  myApp.controller('currencyController', ['requestService', 'availableCurr', 'commissionList', function(requestService, availableCurr, commissionList) {
+    this.availableCurr = availableCurr;
+    this.comissionList = commissionList;
 
-    $scope.giveCurr = 'UAH';
-    $scope.getCurr = 'USD';
+    this.giveCurr = 'UAH';
+    this.getCurr = 'USD';
 
-    $scope.course = {
+    this.course = {
       sell: 1,
       reverseSell: 1
     };
 
-    $scope.giveAmount = null;
-    $scope.getAmount = null;
-    $scope.comission = '0%';
+    this.giveAmount = 0;
+    this.getAmount = 0;
+    this.comission = '0%';
 
-    $scope.setData = () => requestService.getData($scope.giveCurr, $scope.getCurr)
+    this.setData = () => requestService.getData(this.giveCurr, this.getCurr)
       .then(rate => {
-        $scope.course.sell = rate.toFixed(6);
-        $scope.course.reverseSell = (1 / rate).toFixed(6);
+        this.course.sell = rate.toFixed(6);
+        this.course.reverseSell = (1 / rate).toFixed(6);
       })
-      .then($scope.convert);
+      .then(this.convert);
 
-    angular.element($scope.setData);
+    angular.element(this.setData);
 
-    $scope.convert = () => {
-      const persent = (100 - parseInt($scope.comission, 10)) / 100;
-      $scope.getAmount = ($scope.giveAmount * $scope.course.sell * persent).toFixed(2);
+    this.convert = () => {
+      const persent = (100 - parseInt(this.comission, 10)) / 100;
+      this.getAmount = (this.giveAmount * this.course.sell * persent).toFixed(2);
     };
 
-    $scope.reverseConvert = () => {
-      const persent = (100 - parseInt($scope.comission, 10)) / 100;
-      $scope.giveAmount = ($scope.getAmount * $scope.course.reverseSell * persent).toFixed(2);
+    this.reverseConvert = () => {
+      const persent = (100 - parseInt(this.comission, 10)) / 100;
+      this.giveAmount = (this.getAmount * this.course.reverseSell * persent).toFixed(2);
     };
 
-    $scope.swapCurrencies = () => {
-      [$scope.giveCurr, $scope.getCurr] = [$scope.getCurr, $scope.giveCurr];
+    this.swapCurrencies = () => {
+      [this.giveCurr, this.getCurr] = [this.getCurr, this.giveCurr];
 
-      $scope.setData();
+      this.setData();
     };
   }]);
 })();
