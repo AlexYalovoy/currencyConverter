@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp",
-    "build": "gulp build",
+    "build": "gulp build-prod",
     "lint": "eslint --ext .js src/"
   },
   "pre-commit": [

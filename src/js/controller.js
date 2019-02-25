@@ -1,21 +1,8 @@
+/* eslint-disable max-params, max-len */
 (() => {
-  myApp.controller('currencyController', ['$scope', 'requestService', ($scope, requestService) => {
-    $scope.availableCurr = [
-      'USD',
-      'EUR',
-      'RUB',
-      'UAH',
-      'GBP'
-    ];
-
-    $scope.comissionList = [
-      '0%',
-      '1%',
-      '2%',
-      '3%',
-      '4%',
-      '5%'
-    ];
+  myApp.controller('currencyController', ['$scope', 'requestService', 'availableCurr', 'commissionList', ($scope, requestService, availableCurr, commissionList) => {
+    $scope.availableCurr = availableCurr;
+    $scope.comissionList = commissionList;
 
     $scope.giveCurr = 'UAH';
     $scope.getCurr = 'USD';
