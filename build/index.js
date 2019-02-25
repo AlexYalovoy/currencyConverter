@@ -20,9 +20,9 @@
     '5%'
   ]);
 })();
+/* eslint-disable max-params, max-len */
 (() => {
-  myApp.controller('currencyController',
-  ['$scope', 'requestService', 'availableCurr', 'commissionList',($scope, requestService, availableCurr, commissionList) => {
+  myApp.controller('currencyController', ['$scope', 'requestService', 'availableCurr', 'commissionList', ($scope, requestService, availableCurr, commissionList) => {
     $scope.availableCurr = availableCurr;
     $scope.comissionList = commissionList;
 
