@@ -17,25 +17,6 @@
       get: null
     };
 
-    $scope.$watch(() => this.giveCurr, () => {
-      this.setCourse();
-      this.convert();
-    });
-
-    $scope.$watch(() => this.getCurr, () => {
-      this.setCourse();
-      this.convert();
-    });
-
-    $scope.$watch(() => this.fee, () => {
-      this.setCourse();
-      this.convert();
-    });
-
-    $scope.$watch(() => this.money.give, () => {
-      this.convert();
-    });
-
     this.setCourse = () => {
       this.course.sell = requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee);
       this.course.reverseSell = requestService.getReverseRate(this.course.sell);
@@ -45,10 +26,24 @@
       this.money.get = requestService.convert(this.money.give, this.course.sell);
     };
 
-    angular.element(this.setCourse);
-
     this.swapCurrencies = () => {
       [this.giveCurr, this.getCurr] = [this.getCurr, this.giveCurr];
     };
+
+    $scope.$watchGroup([() => this.giveCurr, () => this.getCurr, () => this.fee],
+      (newV, oldV) => {
+        if (newV === oldV) {
+          return;
+        }
+        this.setCourse();
+        this.convert();
+      });
+
+    $scope.$watch(() => this.money.give, () => {
+      this.convert();
+    });
+
+    // To don't use ng-init use this for initial course
+    angular.element(document).ready(this.setCourse);
   }]);
 })();
