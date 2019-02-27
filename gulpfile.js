@@ -26,7 +26,7 @@ gulp.task('build:html', function() {
 // Development build
 
 gulp.task('build-dev:js', function() {
-  return gulp.src('src/js/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(concat('index.js'))
     .pipe(gulp.dest('./build/'));
 });
@@ -42,7 +42,7 @@ gulp.task('build-dev', gulp.series('build:html', 'build-dev:css', 'build-dev:js'
 // Production build
 
 gulp.task('build-prod:js', function() {
-  return gulp.src('src/js/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(concat('index.js'))
     .pipe(terser())
     .pipe(gulp.dest('./build/'));
