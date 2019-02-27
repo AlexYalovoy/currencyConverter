@@ -1,6 +1,7 @@
 (() => {
   myApp.component('convertor', {
     templateUrl: '../convertor.html',
-    controller: 'currencyController'
+    controller: 'currencyController',
+    controllerAs: 'cc'
   });
 })();
