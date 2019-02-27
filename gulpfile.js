@@ -26,7 +26,7 @@ gulp.task('build:html', function() {
 // Development build
 
 gulp.task('build-dev:js', function() {
-  return gulp.src('src/js/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(concat('index.js'))
     .pipe(gulp.dest('./build/'));
 });
@@ -42,7 +42,7 @@ gulp.task('build-dev', gulp.series('build:html', 'build-dev:css', 'build-dev:js'
 // Production build
 
 gulp.task('build-prod:js', function() {
-  return gulp.src('src/js/*.js')
+  return gulp.src('src/**/*.js')
     .pipe(concat('index.js'))
     .pipe(terser())
     .pipe(gulp.dest('./build/'));
@@ -59,6 +59,6 @@ gulp.task('build-prod', gulp.series('build:html', 'build-prod:css', 'build-prod:
 
 gulp.task('default', gulp.series('build-dev', 'server', function() {
   gulp.watch(['./src/*.html'], gulp.series('build:html', 'bs-reload'));
-  gulp.watch(['./src/js/*.js'], gulp.series('build-dev:js', 'bs-reload'));
+  gulp.watch(['./src/**/*.js'], gulp.series('build-dev:js', 'bs-reload'));
   gulp.watch(['./src/scss/*.scss'], gulp.series('build-dev:css', 'bs-reload'));
 }));
