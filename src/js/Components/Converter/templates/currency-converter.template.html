@@ -1,0 +1,38 @@
+<h2>Currency converter</h2>
+<div class='content-wrapper' ng-controller='currencyController as cc' >
+  <div class='choose-currency'>
+  <div class = 'select-wrapper'>
+    <label for='give-currency-select' class='col-form-label'>You want to exchange</label>
+    <select class = 'select' id = 'give-currency-select' ng-model="cc.giveCurr" ng-options="curr for curr in cc.availableCurr | excludeFrom:cc.getCurr"></select>
+  </div>
+
+  <button type='button' class='swap-btn btn btn-light'  ng-click='cc.swapCurrencies()'>
+    <i class='fas fa-exchange-alt'></i>
+  </button>
+
+  <div class = 'select-wrapper'>
+    <label for='get-currency-select' class='col-form-label'>You want to get</label>
+    <select class = 'select' id = 'get-currency-select' ng-model="cc.getCurr" ng-options="curr for curr in cc.availableCurr | excludeFrom:cc.giveCurr"></select>
+  </div>
+
+  </div>
+  <div class='currency-sum'>
+    <div class='exchange-sum form-group'>
+      <input type='text' class='form-control' placeholder='0.00' ng-model='cc.money.give'>
+    </div>
+    
+    <div class='get-sum form-group'>
+      <input type='text' class='form-control' placeholder='0.00' disabled ng-model='cc.money.get'>
+    </div>
+  </div>
+  <div class='details' >
+    <div class='select-wrapper'>
+      <label>Commission</label>
+      <select class = 'select' ng-model='cc.fee' ng-options="persent for persent in cc.feeList"></select>
+    </div>
+    <div class = 'rates'>
+      <div>Sell 1 {{cc.giveCurr}} for {{cc.course.sell}} {{cc.getCurr}}</div>
+      <div>Or sell <span>{{cc.course.reverseSell}}</span> {{cc.giveCurr}} for 1 {{cc.getCurr}}</div>
+    </div>
+  </div>
+</div>
