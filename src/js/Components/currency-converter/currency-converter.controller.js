@@ -18,8 +18,9 @@
     };
 
     this.setCourse = () => {
-      this.course.sell = requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee);
-      this.course.reverseSell = requestService.getReverseRate(this.course.sell);
+      requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee)
+        .then(d => (this.course.sell = d))
+        .then(() => (this.course.reverseSell = requestService.getReverseRate(this.course.sell)));
     };
 
     this.convert = () => {

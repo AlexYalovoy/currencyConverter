@@ -208,7 +208,7 @@ module.exports = {
       'ignoreExport': false
     }],
     'no-var': 'error',
-    'object-shorthand': ['error', 'always'],
+    'object-shorthand': 0,
     'prefer-const': 'error',
     'prefer-destructuring': [
       'error',

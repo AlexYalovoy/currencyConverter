@@ -7,7 +7,7 @@
     this.setKEY = key => (KEY = key);
     this.setAPI = api => (API = api);
 
-    this.$get = ['$http', 'HOUR', 'USE_CACHE', function($http, HOUR, USE_CACHE) {
+    this.$get = ['$http', 'HOUR', 'USE_CACHE', '$q', function($http, HOUR, USE_CACHE, $q) {
       return {
         setKEY: key => (KEY = key),
         setAPI: api => (API = api),
@@ -22,10 +22,10 @@
           // Get rate from localStore or do request and cache results into localstore
           if (USE_CACHE && storedRate && (time - storedRate.time < HOUR)) {
             sellCourse = (storedRate[`${pair}`] * persent).toFixed(6);
-            return sellCourse;
+            return $q(resolve => resolve(sellCourse));
           }
 
-          $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
+          return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
             .then(response => {
               if (!USE_CACHE) {
                 return response.data[`${pair}`];
@@ -45,9 +45,8 @@
               localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
 
               sellCourse = (storedRate[`${pair}`] * persent).toFixed(6);
+              return sellCourse;
             });
-
-          return sellCourse;
         },
         getReverseRate: rate => (1 / rate).toFixed(6),
         convert: (giveAmount, course) => (giveAmount * course).toFixed(2)
