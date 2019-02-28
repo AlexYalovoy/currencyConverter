@@ -7,60 +7,56 @@
     this.setKEY = key => (KEY = key);
     this.setAPI = api => (API = api);
 
-    this.$get = ['$http', 'HOUR', 'USE_CACHE', '$q', function($http, HOUR, USE_CACHE, $q) {
+    this.$get = ['$http', 'HOUR', 'USE_CACHE', '$q', 'CacheCurrService', function($http, HOUR, USE_CACHE, $q, CacheCurrService) {
       return {
-        setKEY: key => (KEY = key),
-        setAPI: api => (API = api),
         getRateWithFee: (firstCurr, secondCurr, fee) => {
           const pair = `${firstCurr}_${secondCurr}`;
           const reversePair = `${secondCurr}_${firstCurr}`;
-          const storedRate = JSON.parse(localStorage.getItem(`myApp.${pair}`));
+          const storedRate = CacheCurrService.getCourse(pair);
           const time = Date.now();
-          const persent = (100 - parseInt(fee, 10)) / 100;
+          const multiplier = this.getMultiplier(fee);
           let sellCourse = 0;
 
           // Get rate from localStore or do request and cache results into localstore
           if (USE_CACHE && storedRate && (time - storedRate.time < HOUR)) {
-            sellCourse = (storedRate[`${pair}`] * persent).toFixed(6);
+            sellCourse = (storedRate[`${pair}`] * multiplier).toFixed(6);
             return $q(resolve => resolve(sellCourse));
           }
 
           return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
             .then(response => {
               if (!USE_CACHE) {
-                return response.data[`${pair}`];
+                sellCourse = (response.data[`${pair}`] * multiplier).toFixed(6);
+                return sellCourse;
               }
 
-              const rate = Object.assign(
-                {},
-                { [`${pair}`]: response.data[`${pair}`] },
-                { time }
-              );
-              const secondRate = Object.assign(
-                {},
-                { [`${reversePair}`]: response.data[`${reversePair}`] },
-                { time }
-              );
-              localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
-              localStorage.setItem(`myApp.${reversePair}`, JSON.stringify(secondRate));
+              CacheCurrService.saveCurrencyCourse(response.data, pair, time);
+              CacheCurrService.saveCurrencyCourse(response.data, reversePair, time);
 
-              sellCourse = (storedRate[`${pair}`] * persent).toFixed(6);
+              sellCourse = (storedRate[`${pair}`] * multiplier).toFixed(6);
               return sellCourse;
             });
         },
+        setKEY: key => (KEY = key),
+        setAPI: api => (API = api),
         getReverseRate: rate => (1 / rate).toFixed(6),
-        convert: (giveAmount, course) => (giveAmount * course).toFixed(2)
+        convert: (giveAmount, course) => (giveAmount * course).toFixed(2),
+        getMultiplier: fee => (100 - parseInt(fee, 10)) / 100
       };
     }];
   });
 
-  // myApp.service('CacheCurr', function($localStorage) {
-  //   this.saveCurrencyCourse = (data, pair, time) => {
-  //     const rate = Object.assign(
-  //       {},
-  //       { [`${pair}`]: response.data[`${pair}`] },
-  //       { time }
-  //     );
-  //   };
-  // });
+  myApp.service('CacheCurrService', function() {
+    this.saveCurrencyCourse = function(data, pair, time) {
+      const rate = Object.assign(
+        {},
+        { [`${pair}`]: data[`${pair}`] },
+        { time }
+      );
+
+      localStorage.setItem(`myApp.${pair}`, JSON.stringify(rate));
+    };
+
+    this.getCourse = pair => JSON.parse(localStorage.getItem(`myApp.${pair}`));
+  });
 })();
