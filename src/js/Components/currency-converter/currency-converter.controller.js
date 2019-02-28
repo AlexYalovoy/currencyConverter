@@ -1,6 +1,6 @@
 /* eslint-disable max-params, max-len */
 (() => {
-  myApp.controller('currencyController', ['requestService', 'availableCurr', 'feeList', '$scope', function(requestService, availableCurr, feeList, $scope) {
+  myApp.controller('currencyController', ['requestService', 'availableCurr', 'feeList', '$scope', 'initialCourse', function(requestService, availableCurr, feeList, $scope, initialCourse) {
     this.availableCurr = availableCurr;
     this.feeList = feeList;
     this.giveCurr = availableCurr[0];
@@ -8,7 +8,7 @@
     this.fee = feeList[2];
 
     this.course = {
-      sell: 1,
+      sell: initialCourse,
       reverseSell: 1
     };
 
@@ -19,8 +19,7 @@
 
     this.setCourse = () => {
       requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee)
-        .then(d => (this.course.sell = d))
-        .then(() => (this.course.reverseSell = requestService.getReverseRate(this.course.sell)));
+        .then(d => (this.course.sell = d));
     };
 
     this.convert = () => {
@@ -44,7 +43,8 @@
       this.convert();
     });
 
-    // To don't use ng-init use this for initial course
-    angular.element(document).ready(this.setCourse);
+    $scope.$watch(() => this.course.sell, () => {
+      this.course.reverseSell = requestService.getReverseRate(this.course.sell);
+    });
   }]);
 })();

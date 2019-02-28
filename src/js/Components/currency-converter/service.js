@@ -53,4 +53,14 @@
       };
     }];
   });
+
+  // myApp.service('CacheCurr', function($localStorage) {
+  //   this.saveCurrencyCourse = (data, pair, time) => {
+  //     const rate = Object.assign(
+  //       {},
+  //       { [`${pair}`]: response.data[`${pair}`] },
+  //       { time }
+  //     );
+  //   };
+  // });
 })();
