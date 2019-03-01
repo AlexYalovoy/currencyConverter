@@ -7,10 +7,7 @@
     this.getCurr = availableCurr[3];
     this.fee = feeList[2];
 
-    this.course = {
-      sell: initialCourse,
-      reverseSell: 1
-    };
+    this.course = initialCourse;
 
     this.money = {
       give: null,
@@ -18,8 +15,7 @@
     };
 
     this.setCourse = () => {
-      requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee)
-        .then(d => (this.course.sell = d));
+      this.course = requestService.getRateWithFee(this.giveCurr, this.getCurr, this.fee);
     };
 
     this.convert = () => {
@@ -41,10 +37,6 @@
 
     $scope.$watch(() => this.money.give, () => {
       this.convert();
-    });
-
-    $scope.$watch(() => this.course.sell, () => {
-      this.course.reverseSell = requestService.getReverseRate(this.course.sell);
     });
   }]);
 })();

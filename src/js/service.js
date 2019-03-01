@@ -9,33 +9,39 @@
 
     this.$get = ['$http', 'HOUR', 'USE_CACHE', '$q', 'CacheCurrService', function($http, HOUR, USE_CACHE, $q, CacheCurrService) {
       return {
-        getRateWithFee: (firstCurr, secondCurr, fee) => {
+        getRateWithFee: function(firstCurr, secondCurr, fee) {
           const pair = `${firstCurr}_${secondCurr}`;
           const reversePair = `${secondCurr}_${firstCurr}`;
           const storedRate = CacheCurrService.getCourse(pair);
           const time = Date.now();
           const multiplier = this.getMultiplier(fee);
-          let sellCourse = 0;
+          const sellCourse = {};
 
           // Get rate from localStore or do request and cache results into localstore
           if (USE_CACHE && storedRate && (time - storedRate.time < HOUR)) {
-            sellCourse = (storedRate[`${pair}`] * multiplier).toFixed(6);
-            return $q(resolve => resolve(sellCourse));
+            // sellCourse.push(storedRate[`${pair}`] * multiplier).toFixed(6);
+            sellCourse.sell = (storedRate[`${pair}`] * multiplier).toFixed(6);
+            sellCourse.reverseSell = this.getReverseRate(sellCourse.sell);
+            return sellCourse;
           }
 
-          return $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
+          $http.get(`${API}?q=${pair},${reversePair}&compact=ultra&apiKey=${KEY}`)
             .then(response => {
               if (!USE_CACHE) {
-                sellCourse = (response.data[`${pair}`] * multiplier).toFixed(6);
-                return sellCourse;
+                // sellCourse.push = (response.data[`${pair}`] * multiplier).toFixed(6);
+                sellCourse.sell = (storedRate[`${pair}`] * multiplier).toFixed(6);
+                sellCourse.reverseSell = this.getReverseRate(sellCourse.sell);
+                return;
               }
 
               CacheCurrService.saveCurrencyCourse(response.data, pair, time);
               CacheCurrService.saveCurrencyCourse(response.data, reversePair, time);
 
-              sellCourse = (storedRate[`${pair}`] * multiplier).toFixed(6);
-              return sellCourse;
+              // sellCourse.push(storedRate[`${pair}`] * multiplier).toFixed(6);
+              sellCourse.sell = (storedRate[`${pair}`] * multiplier).toFixed(6);
+              sellCourse.reverseSell = this.getReverseRate(sellCourse.sell);
             });
+          return sellCourse;
         },
         setKEY: key => (KEY = key),
         setAPI: api => (API = api),

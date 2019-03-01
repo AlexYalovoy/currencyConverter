@@ -1,17 +1,17 @@
 (() => {
   myApp.config(['$stateProvider', function($stateProvider) {
-    $stateProvider.state({
-      name: 'converter',
-      url: '/converter',
-      templateUrl: 'currency-converter.template.html',
-      resolve: {
-        initialCourse: function(requestService, availableCurr, feeList) {
-          return requestService.getRateWithFee(availableCurr[0], availableCurr[3], feeList[2]);
-        }
-      },
-      controller: 'currencyController',
-      controllerAs: 'cc'
-    })
+    $stateProvider
+      .state({
+        name: 'converter',
+        url: '/converter',
+        templateUrl: 'currency-converter.template.html',
+        resolve: {
+          initialCourse: (requestService, availableCurr, feeList) =>
+            requestService.getRateWithFee(availableCurr[0], availableCurr[3], feeList[2])
+        },
+        controller: 'currencyController',
+        controllerAs: 'cc'
+      })
       .state({
         name: 'home',
         url: '',

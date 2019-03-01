@@ -3,8 +3,8 @@
     "commonjs": true
   },
   "globals": {
-    "myApp": "readable",
-    "angular": "readable"
+    "myApp": "readonly",
+    "angular": "readonly"
   },
   "extends": "./config/eslintconfig.js"
 }
